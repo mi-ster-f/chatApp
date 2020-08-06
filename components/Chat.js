@@ -9,7 +9,7 @@ export default class Chat extends React.Component {
     super(props);
     this.state = { messages: [] };
   }
-
+  // Mount component with initial state including welcome message from system and user
   componentDidMount() {
     this.setState({
       messages: [
@@ -25,14 +25,14 @@ export default class Chat extends React.Component {
         },
         {
           _id: 3,
-          text: 'This is a system message',
-          createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+          text: 'Welcome to the chat, ' + this.props.route.params.name,
+          createdAt: new Date(),
           system: true,
         },
       ],
     });
   }
-
+  // Function to append new message to the state "messages" in the component
   onSend(messages = []) {
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
@@ -53,26 +53,32 @@ export default class Chat extends React.Component {
     );
   }
 
-  // Send a system message to chat initially
+  // function prop for styling of system message in messages state
   renderSystemMessage(props) {
     return (
       <SystemMessage
         {...props}
-        containerStyle={{ backgroundColor: 'pink' }}
-        wrapperStyle={{ borderWidth: 10, borderColor: 'white' }}
-        textStyle={{ color: 'crimson', fontWeight: '900' }}
+        // containerStyle={{ backgroundColor: 'pink' }}
+        // wrapperStyle={{ borderWidth: 10, borderColor: 'white' }}
+        textStyle={{ color: '#fff', fontWeight: '900' }}
       />
     );
   }
 
   render() {
-    let name = this.props.route.params.name;
+    // Decouple proprs
+    let { name } = this.props.route.params;
     this.props.navigation.setOptions({ title: name });
-    let chosenColor = this.props.route.params.color;
+    let { chosenColor } = this.props.route.params.color;
 
     return (
+      // Make sure to set View container to flex 1 so it covers full screen
       <View style={{ flex: 1 }}>
         <GiftedChat
+          // Gifted Chat component
+          messagesContainerStyle={{
+            backgroundColor: this.props.route.params.color,
+          }}
           renderBubble={this.renderBubble}
           renderSystemMessage={this.renderSystemMessage}
           messages={this.state.messages}
@@ -81,7 +87,12 @@ export default class Chat extends React.Component {
             _id: 1,
           }}
         />
-        {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
+
+        {
+          // Library is used to avoid Android keyboard from covering input /
+          // if no Android this isn't used
+          Platform.OS === 'android' ? <KeyboardSpacer /> : null
+        }
       </View>
     );
   }

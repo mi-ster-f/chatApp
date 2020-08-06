@@ -13,18 +13,38 @@ import {
 export default class Start extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: '', color: '#fff' };
+    this.state = { name: 'User', color: '#fff' };
   }
 
   render() {
     return (
       <ImageBackground
+        // Grab the background image asset from the asset dir
         source={require('../assets/BackgroundImage.png')}
         style={styles.backgroundImage}
       >
-        <Text style={styles.appTitle}>The Chat App</Text>
-        <KeyboardAvoidingView style={styles.box}>
-          <View style={styles.inputContainer}>
+        <Text
+          style={styles.appTitle}
+          accessible={true}
+          accessibilityLabel="The Chat app"
+          accessibilityHint="App Title"
+          accessibilityRole="Header"
+        >
+          The Chat App
+        </Text>
+        <View
+          // Container for the Chat Settings
+
+          style={styles.box}
+          accessible={true}
+          accessibilityLabel="Settings Container"
+          accessibilityHint="Contains an input for user name and color background settings"
+          accessibilityRole="Toolbar"
+        >
+          <View
+            // Container to house the avatar icon and the text input
+            style={styles.inputContainer}
+          >
             {/* <Image
               source={require('../assets/userIcon.png')}
               style={{ height: 25, width: 25, right: 3, top: 7 }}
@@ -33,14 +53,29 @@ export default class Start extends React.Component {
               style={styles.input}
               onChangeText={(name) => this.setState({ name })}
               placeholder="Your Name"
+              accessible={true}
+              accessibilityLabel="Set Username Input"
+              accessibilityHint="Set your Username for the chat"
+              // Find proper role for text input
+              accessibilityRole="none"
             />
           </View>
           <View style={styles.colorContainer}>
             <Text style={styles.colorOptionText}>Choose Background Color:</Text>
-            <View style={styles.colorSelector}>
+            <View
+              style={styles.colorSelector}
+              accessible={true}
+              accessibilityLabel="Color Selector"
+              accessibilityHint="Lets you choose your chat background."
+              accessibilityRole="button"
+            >
               {this.state.color == '#090C08' ? (
                 <TouchableOpacity
                   style={[styles.color1, styles.active]}
+                  accessible={true}
+                  accessibilityLabel="Color option #090C08"
+                  accessibilityHint="Color background option number 1"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               ) : (
                 <TouchableOpacity
@@ -50,11 +85,19 @@ export default class Start extends React.Component {
                       color: '#090C08',
                     })
                   }
+                  accessible={true}
+                  accessibilityLabel="Color option #090C08"
+                  accessibilityHint="Color background option number 1"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               )}
               {this.state.color == '#474056' ? (
                 <TouchableOpacity
                   style={[styles.color2, styles.active]}
+                  accessible={true}
+                  accessibilityLabel="Color option #474056"
+                  accessibilityHint="Color background option number 2"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               ) : (
                 <TouchableOpacity
@@ -64,11 +107,19 @@ export default class Start extends React.Component {
                       color: '#474056',
                     })
                   }
+                  accessible={true}
+                  accessibilityLabel="Color option #474056"
+                  accessibilityHint="Color background option number 2"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               )}
               {this.state.color == '#8A95A5' ? (
                 <TouchableOpacity
                   style={[styles.color3, styles.active]}
+                  accessible={true}
+                  accessibilityLabel="Color option #8A95A5"
+                  accessibilityHint="Color background option number 3"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               ) : (
                 <TouchableOpacity
@@ -78,11 +129,19 @@ export default class Start extends React.Component {
                       color: '#8A95A5',
                     })
                   }
+                  accessible={true}
+                  accessibilityLabel="Color option #8A95A5"
+                  accessibilityHint="Color background option number 3"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               )}
               {this.state.color == '#B9C6AE' ? (
                 <TouchableOpacity
                   style={[styles.color4, styles.active]}
+                  accessible={true}
+                  accessibilityLabel="Color option #B9C6AE"
+                  accessibilityHint="Color background option number 4"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               ) : (
                 <TouchableOpacity
@@ -92,6 +151,10 @@ export default class Start extends React.Component {
                       color: '#B9C6AE',
                     })
                   }
+                  accessible={true}
+                  accessibilityLabel="Color option #B9C6AE"
+                  accessibilityHint="Color background option number 4"
+                  accessibilityRole="button"
                 ></TouchableOpacity>
               )}
             </View>
@@ -106,11 +169,15 @@ export default class Start extends React.Component {
                   color: this.state.color,
                 })
               }
+              accessible={true}
+              accessibilityLabel="Start Chatting button"
+              accessibilityHint="Click to Open chat view"
+              accessibilityRole="button"
             >
               <Text style={styles.buttonText}>Start Chatting</Text>
             </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       </ImageBackground>
     );
   }
@@ -145,8 +212,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
     flexDirection: 'row',
-    // borderColor: 'blue',
-    // borderWidth: 2,
     justifyContent: 'center',
   },
   input: {
@@ -163,8 +228,6 @@ const styles = StyleSheet.create({
   },
   colorContainer: {
     flex: 1,
-    // borderColor: 'red',
-    // borderWidth: 2,
     paddingLeft: 20,
     justifyContent: 'center',
     marginVertical: 4,
@@ -202,7 +265,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#B9C6AE',
   },
   active: {
-    borderWidth: 1,
+    borderWidth: 3,
 
     borderColor: '#e5cb90',
     height: 50,
@@ -213,8 +276,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    // borderColor: 'green',
-    // borderWidth: 2,
     justifyContent: 'center',
   },
   button: {
