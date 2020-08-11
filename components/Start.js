@@ -27,8 +27,7 @@ export default class Start extends React.Component {
           style={styles.appTitle}
           accessible={true}
           accessibilityLabel="The Chat app"
-          accessibilityHint="App Title"
-          accessibilityRole="Header"
+          accessibilityRole="header"
         >
           The Chat App
         </Text>
@@ -38,7 +37,6 @@ export default class Start extends React.Component {
           style={styles.box}
           accessible={true}
           accessibilityLabel="Settings Container"
-          accessibilityHint="Contains an input for user name and color background settings"
           accessibilityRole="Toolbar"
         >
           <View
