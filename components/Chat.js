@@ -23,16 +23,78 @@ const firebaseConfig = {
 class Chat extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { messages: [], uid: '' };
+    this.state = {
+      messages: [],
+      uid: '',
+      loggedIntext: 'Please wait.. Logging in..',
+      user: {
+        _id: '',
+        name: '',
+      },
+      systemMessage: [],
+      avatar: '',
+    };
 
     // create a constructor that will initialize the Firestore app and add the config inside it
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-    this.referenceMessageUser = null;
+
+    // creating a references to messages collection in Firestore db
+    this.referenceMessages = firebase.firestore().collection('messages');
   }
 
+  // Mount component with initial state including welcome message from system and user
+  componentDidMount() {
+    //Authorise users anonymously and listen for auth change events
+    this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        try {
+          await firebase.auth().signInAnonymously();
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      this.addSystemMessage();
+      //update user state with currently active user data
+      this.setState({
+        uid: user.uid,
+        loggedInText: '',
+        user: {
+          _id: user.uid,
+          name: this.props.route.params.name,
+        },
+        messages: [],
+      });
+      // // create a reference to the active user's messages
+      // this.referenceMessageUser = firebase
+      //   .firestore()
+      //   .collection('messages')
+      //   .where('uid', '==', this.state.uid);
+      // .orderBy('createdAt', 'desc');
+      /*
+        The onSnapshot method returns an unsubscribe function so all we need to do is save that reference
+       and call the function when the component is unmounted.
+       */
+      console.log('this user uid is ' + this.state.uid);
+      // listen for collection changes for current user
+      this.unsubscribeMessages = this.referenceMessages
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(this.onCollectionUpdate);
+    });
+  }
+
+  componentWillUnmount() {
+    // stop listening to authentication
+    this.authUnsubscribe();
+    // // stop listening for changes
+    this.unsubscribeMessages();
+  }
+
+  // method that writes chat messages to state messages when onSnapshot() gets fired i.e when collection changes
   onCollectionUpdate = (querySnapshot) => {
+    console.log('this is the user obj ' + this.state.user._id);
+    console.log('this is the user obj ' + this.state.user.name);
     const messages = [];
     // go through each document
     querySnapshot.forEach((doc) => {
@@ -42,8 +104,11 @@ class Chat extends React.Component {
         _id: data._id,
         text: data.text.toString(),
         createdAt: data.createdAt.toDate(),
-        user: data.user,
-        avatar: data.avatar,
+        user: {
+          _id: data.user._id,
+          name: data.user.name,
+          avatar: data.user.avatar,
+        },
         uid: data.uid,
       });
     });
@@ -55,23 +120,47 @@ class Chat extends React.Component {
   // Add/save a message to Firestore
   addMessage() {
     let message = this.state.messages;
-    console.log(message[0]);
+    console.log(message);
     this.referenceMessages.add({
       _id: message[0]._id,
       text: message[0].text,
       createdAt: message[0].createdAt,
-      user: this.props.route.params.name,
+      user: this.state.user,
       uid: this.state.uid,
       avatar: 'https://placeimg.com/140/140/any',
     });
   }
 
+  // Add system message function for when user joins chat
+  addSystemMessage() {
+    const systemMessage = {
+      _id: 0,
+      text: this.props.route.params.name + ' has entered the chat',
+      createdAt: new Date(),
+      system: true,
+    };
+    this.setState(
+      (previousState) => ({
+        messages: GiftedChat.append(previousState.messages, systemMessage),
+      }),
+      () => {
+        // Add message to database
+        this.addMessage();
+      }
+    );
+  }
+
   // Function to append new message to the state "messages" in the component
   onSend(messages = []) {
-    this.setState((previousState) => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
-    this.addMessage();
+    this.setState(
+      (previousState) => ({
+        messages: GiftedChat.append(previousState.messages, messages),
+      }),
+      () => {
+        // Add message to database
+        this.addMessage();
+      }
+    );
   }
 
   // function prop for GiftedChat to customise the chat bubble
@@ -100,73 +189,6 @@ class Chat extends React.Component {
     );
   }
 
-  // Mount component with initial state including welcome message from system and user
-  componentDidMount() {
-    // creating a references to messages collection in Firestore db
-    this.referenceMessages = firebase.firestore().collection('messages');
-
-    //Authorise users anonymously and listen for auth change events
-    this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-      if (!user) {
-        try {
-          await firebase.auth().signInAnonymously();
-        } catch (err) {
-          console.log(err);
-        }
-      }
-
-      //update user state with currently active user data
-      this.setState({
-        uid: user.uid,
-        messages: [
-          {
-            _id: 1,
-            text: 'Hello developer',
-            createdAt: new Date(),
-            user: {
-              _id: 2,
-              name: 'React Native',
-              avatar: 'https://placeimg.com/140/140/any',
-            },
-          },
-          {
-            _id: 3,
-            text: 'Welcome to the chat, ' + this.props.route.params.name,
-            createdAt: new Date(),
-            system: true,
-          },
-        ],
-        loggedInText: 'Please wait, you are getting logged in',
-      });
-      if (this.referenceMessages == null || undefined) {
-        console.log('error');
-      } else {
-        // create a reference to the active user's messages
-        this.referenceMessageUser = firebase
-          .firestore()
-          .collection('messages')
-          .where('uid', '==', this.state.uid);
-
-        /*
-        The onSnapshot method returns an unsubscribe function so all we need to do is save that reference
-       and call the function when the component is unmounted.
-       */
-        console.log('this user uid is ' + this.state.uid);
-        // listen for collection changes for current user
-        this.unsubscribeMessagesUser = this.referenceMessagesUser.onSnapshot(
-          this.onCollectionUpdate
-        );
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    // stop listening to authentication
-    this.authUnsubscribe();
-    // // stop listening for changes
-    this.unsubscribeMessagesUser();
-  }
-
   render() {
     // Decouple props
     let { name } = this.props.route.params.name;
@@ -176,6 +198,7 @@ class Chat extends React.Component {
     return (
       // Make sure to set View container to flex 1 so it covers full screen
       <View style={{ flex: 1 }}>
+        <Text>{this.state.loggedInText}</Text>
         <GiftedChat
           // Gifted Chat component
           messagesContainerStyle={{
@@ -185,9 +208,7 @@ class Chat extends React.Component {
           renderSystemMessage={this.renderSystemMessage}
           messages={this.state.messages}
           onSend={(messages) => this.onSend(messages)}
-          user={{
-            _id: 1,
-          }}
+          user={this.state.user}
         />
 
         {
