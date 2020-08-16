@@ -63,6 +63,9 @@ class Chat extends React.Component {
         }
       }
       // this.addSystemMessage();
+
+      //load messages from asyncStorage
+      this.getMessages();
       //update user state with currently active user data
       this.setState({
         uid: user.uid,
@@ -70,7 +73,7 @@ class Chat extends React.Component {
         user: {
           _id: user.uid,
           name: this.props.route.params.name,
-          avatar: 'https://placeimg.com/140/140/any',
+          avatar: '',
         },
         messages: [
           {
@@ -97,6 +100,19 @@ class Chat extends React.Component {
     this.authUnsubscribe();
     // // stop listening for changes
     this.unsubscribeMessages();
+  }
+
+  // function to get messages from asyncStorage and set as messages state
+  async getMessages() {
+    let messages = '';
+    try {
+      messages = (await AsyncStorage.getItem('messages')) || [];
+      this.setState({
+        messages: JSON.parse(messages),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   // method that writes chat messages to state messages when onSnapshot() gets fired i.e when collection changes
