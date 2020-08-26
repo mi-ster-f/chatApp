@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, Button } from 'react-native';
 import {
   GiftedChat,
   Bubble,
@@ -66,8 +66,8 @@ class Chat extends React.Component {
   }
 
   // Mount component with initial state including welcome message from system and user
-  componentDidMount() {
-    NetInfo.isConnected.addEventListener(
+  async componentDidMount() {
+    await NetInfo.isConnected.addEventListener(
       'connectionChange',
       this.handleConnectivityChange
     );
@@ -270,6 +270,7 @@ class Chat extends React.Component {
       // Make sure to set View container to flex 1 so it covers full screen
       <View style={{ flex: 1 }}>
         <Text>{this.state.loggedInText}</Text>
+        <Button onPress={() => this.deleteMessages()}>Wipe messages</Button>
         <GiftedChat
           // Gifted Chat component
           messagesContainerStyle={{
