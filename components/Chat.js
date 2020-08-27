@@ -10,10 +10,19 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { v4 as uuidv4 } from 'uuid';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
 // Dealing with yellow banner timeout issue with react-native sdk
 // https://stackoverflow.com/questions/44603362/setting-a-timer-for-a-long-period-of-time-i-e-multiple-minutes
 import { YellowBox } from 'react-native';
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+
+// Dealing with yellow banner Animated.event issue with react-native sdk
+// https://stackoverflow.com/questions/61014661/animated-usenativedriver-was-not-specified-issue-of-reactnativebase-input
+// https://codedaily.io/tutorials/5/Disable-the-Yellow-Box-in-React-Native
+YellowBox.ignoreWarnings(['Animated: `useNativeDriver`', 'Animated.event']);
 
 // import firebase
 const firebase = require('firebase');
@@ -46,15 +55,12 @@ class Chat extends React.Component {
       ],
       isConnected: false,
       uid: '',
-      loggedIntext: 'Please wait.. Logging in..',
       user: {
         _id: '',
         name: this.props.route.params.name,
         avatar: '',
       },
     };
-
-    YellowBox.ignoreWarnings(['Setting a timer']);
 
     // create a constructor that will initialize the Firestore app and add the config inside it
     if (!firebase.apps.length) {
@@ -67,70 +73,65 @@ class Chat extends React.Component {
 
   // Mount component with initial state including welcome message from system and user
   async componentDidMount() {
-    await NetInfo.isConnected.addEventListener(
-      'connectionChange',
-      this.handleConnectivityChange
-    );
-
     // Use Netinfo to check if user is online
-    NetInfo.isConnected.fetch().then((isConnected) => {
-      if (isConnected) {
-        console.log('online');
-        this.setState({
-          isConnected: true,
-        });
-        // Checks is user is logged in otherwise authorise users anonymously and listen for auth change events
-        this.authUnsubscribe = firebase
-          .auth()
-          .onAuthStateChanged(async (user) => {
-            if (!user) {
-              try {
-                await firebase.auth().signInAnonymously();
-              } catch (err) {
-                console.log(err);
-              }
-            }
-            this.setState({
-              uid: user.uid,
-              user: {
-                _id: user.uid,
-                name: this.props.route.params.name,
-                avatar: '',
-              },
-            });
-
-            /*
-        The onSnapshot method returns an unsubscribe function so all we need to do is save that reference
-       and call the function when the component is unmounted.
-       */
-            // listen for collection changes for chat room
-            this.unsubscribeMessages = this.referenceMessages
-              .orderBy('createdAt', 'desc')
-              .onSnapshot(this.onCollectionUpdate);
-          });
-      } else {
-        console.log('offline');
-        this.setState({
-          isConnected: false,
-        });
-        //load messages from asyncStorage
-        this.getMessages();
-      }
-    });
+    NetInfo.addEventListener(this.handleConnectivityChange);
   }
 
   componentWillUnmount() {
     if (this.state.isConnected) {
       // stop listening to authentication
       this.authUnsubscribe();
-      // // stop listening for changes
+      // stop listening for changes
       this.unsubscribeMessages();
+
+      // NetInfo.removeEventListener(this.handleConnectivityChange);
     }
-    NetInfo.isConnected.removeEventListener(
-      'connectionChange',
-      this.handleConnectivityChange
-    );
   }
+
+  handleConnectivityChange = (state) => {
+    if (state.isConnected) {
+      console.log('online');
+      this.setState({
+        isConnected: true,
+      });
+      // Checks is user is logged in otherwise authorise users anonymously and listen for auth change events
+      this.authUnsubscribe = firebase
+        .auth()
+        .onAuthStateChanged(async (user) => {
+          if (!user) {
+            try {
+              await firebase.auth().signInAnonymously();
+            } catch (err) {
+              console.log(err);
+            }
+          }
+          this.setState({
+            uid: user.uid,
+            user: {
+              _id: user.uid,
+              name: this.props.route.params.name,
+              avatar: '',
+            },
+          });
+
+          /*
+      The onSnapshot method returns an unsubscribe function so all we need to do is save that reference
+     and call the function when the component is unmounted.
+     */
+          // listen for collection changes for chat room
+          this.unsubscribeMessages = this.referenceMessages
+            .orderBy('createdAt', 'desc')
+            .onSnapshot(this.onCollectionUpdate);
+        });
+    } else {
+      console.log('offline');
+      this.setState({
+        isConnected: false,
+      });
+      //load messages from asyncStorage
+      this.getMessages();
+    }
+  };
 
   // function to get messages from asyncStorage and set as messages state
   async getMessages() {
@@ -154,7 +155,7 @@ class Chat extends React.Component {
       let data = doc.data();
       messages.push({
         _id: data._id,
-        text: data.text.toString(),
+        text: data.text.toString() || '',
         createdAt: data.createdAt.toDate(),
         user: {
           _id: data.user._id,
@@ -162,6 +163,8 @@ class Chat extends React.Component {
           avatar: data.user.avatar,
         },
         uid: data.uid,
+        image: data.image || '',
+        location: data.location || null,
       });
     });
     this.setState({
@@ -172,7 +175,10 @@ class Chat extends React.Component {
   // Add/save a message to Firestore
   addMessage() {
     let message = this.state.messages;
-    console.log(message[0]);
+    // handle case where files are sent as message without text
+    if (!message[0].text) {
+      message[0].text = '';
+    }
     this.referenceMessages.add({
       uid: this.state.uid,
       _id: message[0]._id,
@@ -183,6 +189,8 @@ class Chat extends React.Component {
         name: this.props.route.params.name,
         avatar: this.state.user.avatar,
       },
+      image: message[0].image || '',
+      location: message[0].location || null,
     });
   }
 
@@ -200,7 +208,7 @@ class Chat extends React.Component {
 
   // Function to append new message to the state "messages" in the component
   onSend(messages = []) {
-    console.log(messages);
+    // console.log(messages);
     this.setState(
       (previousState) => ({
         messages: GiftedChat.append(previousState.messages, messages),
@@ -208,6 +216,7 @@ class Chat extends React.Component {
       () => {
         // Add message to database
         this.addMessage();
+        // Store message to local async storage
         this.saveMessages();
       }
     );
@@ -241,8 +250,6 @@ class Chat extends React.Component {
     return (
       <SystemMessage
         {...props}
-        // containerStyle={{ backgroundColor: 'pink' }}
-        // wrapperStyle={{ borderWidth: 10, borderColor: 'white' }}
         textStyle={{ color: '#fff', fontWeight: '900' }}
       />
     );
@@ -262,6 +269,31 @@ class Chat extends React.Component {
     }
   };
 
+  // Creates a new component for the custom actions that works with the props that this function receives
+  renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
+  // function checks each message to see if it contains location data.
+  //If the answer is yes, it will return a MapView
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     // Set title as user's name
     this.props.navigation.setOptions({ title: this.props.route.params.name });
@@ -269,14 +301,15 @@ class Chat extends React.Component {
     return (
       // Make sure to set View container to flex 1 so it covers full screen
       <View style={{ flex: 1 }}>
-        <Text>{this.state.loggedInText}</Text>
-        <Button onPress={() => this.deleteMessages()}>Wipe messages</Button>
+        {/* <Button onPress={() => this.deleteMessages()}>Wipe messages</Button> */}
         <GiftedChat
           // Gifted Chat component
           messagesContainerStyle={{
             backgroundColor: this.props.route.params.color,
           }}
+          renderActions={this.renderCustomActions}
           renderBubble={this.renderBubble}
+          renderCustomView={this.renderCustomView}
           renderSystemMessage={this.renderSystemMessage}
           renderInputToolbar={this.renderInputToolbar}
           messages={this.state.messages}
