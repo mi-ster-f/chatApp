@@ -23,7 +23,7 @@ export default class CustomActions extends React.Component {
       if (status === 'granted') {
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: 'Images',
-        }).catch((error) => console.log(error));
+        }).catch((e) => console.log(e));
         if (!result.cancelled) {
           const imageUrl = await this.uploadImage(result.uri);
           this.props.onSend({ image: imageUrl });
@@ -43,7 +43,7 @@ export default class CustomActions extends React.Component {
       if (status === 'granted') {
         let result = await ImagePicker.launchCameraAsync({
           mediaTypes: 'Images',
-        }).catch((error) => console.log(error));
+        }).catch((e) => console.log(e));
         if (!result.cancelled) {
           const imageUrl = await this.uploadImage(result.uri);
           this.props.onSend({ image: imageUrl });
@@ -59,8 +59,8 @@ export default class CustomActions extends React.Component {
     try {
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
-        let result = await Location.getCurrentPositionAsync({}).catch((error) =>
-          console.log(error)
+        let result = await Location.getCurrentPositionAsync({}).catch((e) =>
+          console.log(e)
         );
         if (result) {
           // don't need to store this in Firebase since the MapView component simply renders a map view if it sees
@@ -111,8 +111,8 @@ export default class CustomActions extends React.Component {
       const imageUrl = await snapshot.ref.getDownloadURL();
 
       return imageUrl;
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -131,19 +131,23 @@ export default class CustomActions extends React.Component {
         cancelButtonIndex,
       },
       async (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
-            console.log('user wants to pick an image');
-            this.pickImage();
-            return;
-          case 1:
-            console.log('user wants to take a photo');
-            this.takePhoto();
-            return;
-          case 2:
-            console.log('user wants to get their location');
-            this.getLocation();
-          default:
+        try {
+          switch (buttonIndex) {
+            case 0:
+              console.log('user wants to pick an image');
+              this.pickImage();
+              return;
+            case 1:
+              console.log('user wants to take a photo');
+              this.takePhoto();
+              return;
+            case 2:
+              console.log('user wants to get their location');
+              this.getLocation();
+            default:
+          }
+        } catch (e) {
+          console.log(e);
         }
       }
     );

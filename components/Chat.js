@@ -134,17 +134,17 @@ class Chat extends React.Component {
   };
 
   // function to get messages from asyncStorage and set as messages state
-  async getMessages() {
+  getMessages = async () => {
     let messages = '';
     try {
       messages = (await AsyncStorage.getItem('messages')) || [];
       this.setState({
         messages: JSON.parse(messages),
       });
-    } catch (error) {
-      console.log(error.message);
+    } catch (e) {
+      console.log(e.message);
     }
-  }
+  };
 
   // method that writes chat messages to state messages when onSnapshot() gets fired i.e when collection changes
   onCollectionUpdate = (querySnapshot) => {
@@ -173,7 +173,7 @@ class Chat extends React.Component {
   };
 
   // Add/save a message to Firestore
-  addMessage() {
+  addMessage = () => {
     let message = this.state.messages;
     // handle case where files are sent as message without text
     if (!message[0].text) {
@@ -192,21 +192,22 @@ class Chat extends React.Component {
       image: message[0].image || '',
       location: message[0].location || null,
     });
-  }
+  };
 
   // function to save current state of messages to local async storage
-  async saveMessages() {
+  saveMessages = async () => {
     try {
       await AsyncStorage.setItem(
         'messages',
         JSON.stringify(this.state.messages)
       );
-    } catch (error) {
-      console.log(error.message);
+    } catch (e) {
+      console.log(e.message);
     }
-  }
+  };
 
   // Function to append new message to the state "messages" in the component
+  // We set a default function parameter to avoid the scenario where the param is undefined or null
   onSend(messages = []) {
     // console.log(messages);
     this.setState(
@@ -226,13 +227,13 @@ class Chat extends React.Component {
   deleteMessages = async () => {
     try {
       await AsyncStorage.removeItem('messages');
-    } catch (error) {
-      console.log(error.message);
+    } catch (e) {
+      console.log(e.message);
     }
   };
 
   // function prop for GiftedChat to customise the chat bubble
-  renderBubble(props) {
+  renderBubble = (props) => {
     return (
       <Bubble
         {...props}
@@ -243,7 +244,7 @@ class Chat extends React.Component {
         }}
       />
     );
-  }
+  };
 
   // function prop for styling of system message in messages state
   renderSystemMessage = (props) => {
@@ -276,7 +277,7 @@ class Chat extends React.Component {
 
   // function checks each message to see if it contains location data.
   //If the answer is yes, it will return a MapView
-  renderCustomView(props) {
+  renderCustomView = (props) => {
     const { currentMessage } = props;
     if (currentMessage.location) {
       return (
@@ -292,7 +293,7 @@ class Chat extends React.Component {
       );
     }
     return null;
-  }
+  };
 
   render() {
     // Set title as user's name

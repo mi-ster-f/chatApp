@@ -12,13 +12,13 @@ import {
 // Dealing with yellow banner timeout issue with react-native sdk
 // https://stackoverflow.com/questions/44603362/setting-a-timer-for-a-long-period-of-time-i-e-multiple-minutes
 import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['Setting a timer']);
 
 // The application’s landing page component that renders the login/registeration UI
 export default class Start extends React.Component {
   constructor(props) {
     super(props);
     this.state = { name: 'User', color: '#fff' };
-    YellowBox.ignoreWarnings(['Setting a timer']);
   }
 
   render() {
