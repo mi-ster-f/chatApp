@@ -11,11 +11,12 @@ Featuring:
  
 ### Installation Guide
 
-The Chat app requires the Expo command line interface to run `npm install expo-cli --global`
-
-Then install the dependencies `npm i`
-
-To start the app `npm/expo start`
+* The Chat app requires the Expo command line interface to run `npm install expo-cli --global`
+* Then install the dependencies `npm i`
+* To start the app `npm/expo start`
+* Install the [Expo mobile app for Android](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en_CA) 
+* Open the Expo app on mobile and select "Scan QR code"
+* Scan the QR code that is generated from running `npm/expo start`
 
 ### Dependencies
 ```
