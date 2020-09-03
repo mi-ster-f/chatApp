@@ -48,21 +48,23 @@ Featuring:
 
 ### Features and snaps
 >  Login screen
-
-[![Screenshot-20200903-001443.png](https://i.postimg.cc/7h1YRkRG/Screenshot-20200903-001443.png)](https://postimg.cc/GT2CBZdd)
 * Once you load the app...
 * Type in your username
 * Select a background colour scheme
 * Start chatting!
 
+[![Screenshot-20200903-001443.png](https://i.postimg.cc/7h1YRkRG/Screenshot-20200903-001443.png)](https://postimg.cc/GT2CBZdd)
+
+
 
 > Chat view
-
-[![Screenshot-20200903-001631.png](https://i.postimg.cc/kMW4GQ5J/Screenshot-20200903-001631.png)](https://postimg.cc/F1smnJc8)
 * Click the plus icon to bring up an actions view...
 * Send a photo from your camera roll to the chat
 * Take a photo with your camera in real-time and send to chat
 * Send your location to chat
+
+[![Screenshot-20200903-001631.png](https://i.postimg.cc/kMW4GQ5J/Screenshot-20200903-001631.png)](https://postimg.cc/F1smnJc8)
+
 
 
 
