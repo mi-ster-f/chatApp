@@ -11,8 +11,11 @@ Featuring:
  
 ### Installation Guide
 
+* Clone the repo `git clone https://github.com/fratzio/chatApp.git`
+* Make sure you are at the root directory when installing dependencies `chatApp` 
 * The Chat app requires the Expo command line interface to run `npm install expo-cli --global`
 * Then install the dependencies `npm i`
+* Sometimes Firebase has been known to throw install errors. In this case, install it directly `Install firebase --save`
 * To start the app `npm/expo start`
 * Install the [Expo mobile app for Android](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en_CA) 
 * Open the Expo app on mobile and select "Scan QR code"
