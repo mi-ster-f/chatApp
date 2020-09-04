@@ -21,6 +21,10 @@ Featuring:
 * Open the Expo app on mobile and select "Scan QR code"
 * Scan the QR code that is generated from running `npm/expo start`
 
+You will need to create a Firebase account and update these credentials (in Chat.js file) in order to have the messages and files stored in your Firebase server
+
+[![Screen-Shot-2020-09-04-at-12-09-40-am.png](https://i.postimg.cc/xdfvyHRM/Screen-Shot-2020-09-04-at-12-09-40-am.png)](https://postimg.cc/75RJq5jZ)
+
 ### Dependencies
 ```
     "@react-native-community/async-storage": "^1.11.0",
