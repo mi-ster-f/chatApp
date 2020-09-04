@@ -1,4 +1,32 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Chat.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Chat.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
 import { View, YellowBox } from 'react-native';
 import {
   GiftedChat,
@@ -241,7 +269,7 @@ class Chat extends React.Component {
    * saves current state of messages to AsyncStorage (local storage)
    * @function saveMessages
    * @async
-   * @return {Promise<string>} The data will be saved to storage
+   * @return {Promise&lt;string>} The data will be saved to storage
    */
 
   saveMessages = async () => {
@@ -283,7 +311,7 @@ class Chat extends React.Component {
    * @function deleteMessages
    * @async
    * @param {none}
-   * @return {Promise<string>} The data will deleted from local storage
+   * @return {Promise&lt;string>} The data will deleted from local storage
    */
 
   deleteMessages = async () => {
@@ -304,7 +332,7 @@ class Chat extends React.Component {
 
   renderBubble = (props) => {
     return (
-      <Bubble
+      &lt;Bubble
         {...props}
         wrapperStyle={{
           right: {
@@ -324,7 +352,7 @@ class Chat extends React.Component {
 
   renderSystemMessage = (props) => {
     return (
-      <SystemMessage
+      &lt;SystemMessage
         {...props}
         textStyle={{ color: '#fff', fontWeight: '900' }}
       />
@@ -348,7 +376,7 @@ class Chat extends React.Component {
   renderInputToolbar = (props) => {
     if (this.state.isConnected == false) {
     } else {
-      return <InputToolbar {...props} />;
+      return &lt;InputToolbar {...props} />;
     }
   };
 
@@ -360,7 +388,7 @@ class Chat extends React.Component {
    */
 
   renderCustomActions = (props) => {
-    return <CustomActions {...props} />;
+    return &lt;CustomActions {...props} />;
   };
 
   /**
@@ -375,7 +403,7 @@ class Chat extends React.Component {
     const { currentMessage } = props;
     if (currentMessage.location) {
       return (
-        <MapView
+        &lt;MapView
           style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
           region={{
             latitude: currentMessage.location.latitude,
@@ -395,9 +423,9 @@ class Chat extends React.Component {
 
     return (
       // Make sure to set View container to flex 1 so it covers full screen
-      <View style={{ flex: 1 }}>
-        {/* <Button onPress={() => this.deleteMessages()}>Wipe messages</Button> */}
-        <GiftedChat
+      &lt;View style={{ flex: 1 }}>
+        {/* &lt;Button onPress={() => this.deleteMessages()}>Wipe messages&lt;/Button> */}
+        &lt;GiftedChat
           // Gifted Chat component
           messagesContainerStyle={{
             backgroundColor: this.props.route.params.color,
@@ -415,11 +443,34 @@ class Chat extends React.Component {
         {
           // Library is used to avoid Android keyboard from covering input /
           // if no Android this isn't used
-          // Platform.OS === 'android' ? <KeyboardSpacer /> : null
+          // Platform.OS === 'android' ? &lt;KeyboardSpacer /> : null
         }
-      </View>
+      &lt;/View>
     );
   }
 }
 
 export default Chat;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="chat.html">chat</a></li><li><a href="customactions.html">customactions</a></li><li><a href="start.html">start</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMessage">addMessage</a></li><li><a href="global.html#deleteMessages">deleteMessages</a></li><li><a href="global.html#getMessages">getMessages</a></li><li><a href="global.html#onActionPress">onActionPress</a></li><li><a href="global.html#onCollectionUpdate">onCollectionUpdate</a></li><li><a href="global.html#onSend">onSend</a></li><li><a href="global.html#pickImage">pickImage</a></li><li><a href="global.html#renderBubble">renderBubble</a></li><li><a href="global.html#renderCustomActions">renderCustomActions</a></li><li><a href="global.html#renderCustomView">renderCustomView</a></li><li><a href="global.html#renderInputToolbar">renderInputToolbar</a></li><li><a href="global.html#renderSystemMessage">renderSystemMessage</a></li><li><a href="global.html#saveMessages">saveMessages</a></li><li><a href="global.html#styles">styles</a></li><li><a href="global.html#takePhoto">takePhoto</a></li><li><a href="global.html#uploadImage">uploadImage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Fri Sep 04 2020 00:36:48 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
