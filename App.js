@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
 // import react native gesture handler
 import 'react-native-gesture-handler';
 

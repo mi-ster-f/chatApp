@@ -1,4 +1,32 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Start.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Start.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
 import {
   View,
   Text,
@@ -27,20 +55,20 @@ export default class Start extends React.Component {
 
   render() {
     return (
-      <ImageBackground
+      &lt;ImageBackground
         // Grab the background image asset from the asset dir
         source={require('../assets/BackgroundImage.png')}
         style={styles.backgroundImage}
       >
-        <Text
+        &lt;Text
           style={styles.appTitle}
           accessible={true}
           accessibilityLabel="The Chat app"
           accessibilityRole="header"
         >
           The Chat App
-        </Text>
-        <View
+        &lt;/Text>
+        &lt;View
           // Container for the Chat Settings
 
           style={styles.box}
@@ -48,15 +76,15 @@ export default class Start extends React.Component {
           accessibilityLabel="Settings Container"
           accessibilityRole="Toolbar"
         >
-          <View
+          &lt;View
             // Container to house the avatar icon and the text input
             style={styles.inputContainer}
           >
-            {/* <Image
+            {/* &lt;Image
               source={require('../assets/userIcon.png')}
               style={{ height: 25, width: 25, right: 3, top: 7 }}
             /> */}
-            <TextInput
+            &lt;TextInput
               style={styles.input}
               onChangeText={(name) => this.setState({ name })}
               placeholder="Your Name"
@@ -66,10 +94,10 @@ export default class Start extends React.Component {
               // Find proper role for text input
               accessibilityRole="none"
             />
-          </View>
-          <View style={styles.colorContainer}>
-            <Text style={styles.colorOptionText}>Choose Background Color:</Text>
-            <View
+          &lt;/View>
+          &lt;View style={styles.colorContainer}>
+            &lt;Text style={styles.colorOptionText}>Choose Background Color:&lt;/Text>
+            &lt;View
               style={styles.colorSelector}
               accessible={true}
               accessibilityLabel="Color Selector"
@@ -77,15 +105,15 @@ export default class Start extends React.Component {
               accessibilityRole="button"
             >
               {this.state.color == '#090C08' ? (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.color1, styles.active]}
                   accessible={true}
                   accessibilityLabel="Color option #090C08"
                   accessibilityHint="Color background option number 1"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               ) : (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.colorStyles, styles.color1]}
                   onPress={() =>
                     this.setState({
@@ -96,18 +124,18 @@ export default class Start extends React.Component {
                   accessibilityLabel="Color option #090C08"
                   accessibilityHint="Color background option number 1"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               )}
               {this.state.color == '#474056' ? (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.color2, styles.active]}
                   accessible={true}
                   accessibilityLabel="Color option #474056"
                   accessibilityHint="Color background option number 2"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               ) : (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.colorStyles, styles.color2]}
                   onPress={() =>
                     this.setState({
@@ -118,18 +146,18 @@ export default class Start extends React.Component {
                   accessibilityLabel="Color option #474056"
                   accessibilityHint="Color background option number 2"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               )}
               {this.state.color == '#8A95A5' ? (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.color3, styles.active]}
                   accessible={true}
                   accessibilityLabel="Color option #8A95A5"
                   accessibilityHint="Color background option number 3"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               ) : (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.colorStyles, styles.color3]}
                   onPress={() =>
                     this.setState({
@@ -140,18 +168,18 @@ export default class Start extends React.Component {
                   accessibilityLabel="Color option #8A95A5"
                   accessibilityHint="Color background option number 3"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               )}
               {this.state.color == '#B9C6AE' ? (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.color4, styles.active]}
                   accessible={true}
                   accessibilityLabel="Color option #B9C6AE"
                   accessibilityHint="Color background option number 4"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               ) : (
-                <TouchableOpacity
+                &lt;TouchableOpacity
                   style={[styles.colorStyles, styles.color4]}
                   onPress={() =>
                     this.setState({
@@ -162,12 +190,12 @@ export default class Start extends React.Component {
                   accessibilityLabel="Color option #B9C6AE"
                   accessibilityHint="Color background option number 4"
                   accessibilityRole="button"
-                ></TouchableOpacity>
+                >&lt;/TouchableOpacity>
               )}
-            </View>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
+            &lt;/View>
+          &lt;/View>
+          &lt;View style={styles.buttonContainer}>
+            &lt;TouchableOpacity
               style={styles.button}
               //
               onPress={() =>
@@ -181,11 +209,11 @@ export default class Start extends React.Component {
               accessibilityHint="Click to Open chat view"
               accessibilityRole="button"
             >
-              <Text style={styles.buttonText}>Start Chatting</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ImageBackground>
+              &lt;Text style={styles.buttonText}>Start Chatting&lt;/Text>
+            &lt;/TouchableOpacity>
+          &lt;/View>
+        &lt;/View>
+      &lt;/ImageBackground>
     );
   }
 }
@@ -299,3 +327,26 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="chat.html">chat</a></li><li><a href="customactions.html">customactions</a></li><li><a href="start.html">start</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addMessage">addMessage</a></li><li><a href="global.html#deleteMessages">deleteMessages</a></li><li><a href="global.html#getMessages">getMessages</a></li><li><a href="global.html#onActionPress">onActionPress</a></li><li><a href="global.html#onCollectionUpdate">onCollectionUpdate</a></li><li><a href="global.html#onSend">onSend</a></li><li><a href="global.html#pickImage">pickImage</a></li><li><a href="global.html#renderBubble">renderBubble</a></li><li><a href="global.html#renderCustomActions">renderCustomActions</a></li><li><a href="global.html#renderCustomView">renderCustomView</a></li><li><a href="global.html#renderInputToolbar">renderInputToolbar</a></li><li><a href="global.html#renderSystemMessage">renderSystemMessage</a></li><li><a href="global.html#saveMessages">saveMessages</a></li><li><a href="global.html#styles">styles</a></li><li><a href="global.html#takePhoto">takePhoto</a></li><li><a href="global.html#uploadImage">uploadImage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Fri Sep 04 2020 00:36:48 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
